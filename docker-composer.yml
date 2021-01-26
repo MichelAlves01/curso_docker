@@ -1,0 +1,57 @@
+version: "3"
+services:
+  nginx:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: michel_alves/nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks: 
+      - production-network
+    depends_on: 
+      - "node1"
+      - "node2"
+      - "node3"
+  mongodb:
+    image: mongo
+    networks: 
+      - production-network
+  node1:
+    build: 
+      dockerfile: ./Dockerfile
+      context: .
+    image: michel_alves/node
+    container_name: test1
+    ports:
+      - "3000"
+    networks: 
+      - production-network
+    depends_on: "mongodb"
+  node2:
+    build: 
+      dockerfile: ./Dockerfile
+      context: .
+    image: michel_alves/node
+    container_name: test2
+    ports:
+      - "3000"
+    networks: 
+      - production-network
+    depends_on: "mongodb"
+  node3:
+    build: 
+      dockerfile: ./Dockerfile
+      context: .
+    image: michel_alves/node
+    container_name: test3
+    ports:
+      - "3000"
+    networks: 
+      - production-network
+    depends_on: "mongodb"
+
+networks:
+  production-network:
+    driver: bridge
